@@ -1,9 +1,10 @@
 import { PrismaService } from '@/core/prisma/prisma.service'
 import { Injectable } from '@nestjs/common'
 import { CreateUserDto } from '@/modules/users/dto/create-user.dto'
-import { User } from '@prisma/client'
+import { User, UserRoles } from '@prisma/client'
 import { UpdateUserDto } from '@/modules/users/dto/update-user.dto'
 import { GetUserDto } from '@/modules/users/dto/get-user.dto'
+import { selectUser } from '@/consts/select-user'
 
 @Injectable()
 export class UsersRepository {
@@ -16,46 +17,30 @@ export class UsersRepository {
         lastName: body.lastName,
         username: body.username,
         password: body.password,
+        role: body.role,
       },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        username: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: selectUser,
     })
   }
 
   async getUserById(id: string): Promise<GetUserDto | null> {
     return this.prisma.user.findUnique({
       where: { id },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        username: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: selectUser,
+    })
+  }
+
+  async getUsersByRole(role: UserRoles): Promise<GetUserDto[]> {
+    return this.prisma.user.findMany({
+      where: { role },
+      select: selectUser,
     })
   }
 
   async getUserByUsername(username: string): Promise<GetUserDto | null> {
     return this.prisma.user.findUnique({
       where: { username },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        username: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: selectUser,
     })
   }
 
@@ -76,16 +61,9 @@ export class UsersRepository {
         lastName: body.lastName,
         username: body.username,
         password: body.password,
+        role: body.role,
       },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        username: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: selectUser,
     })
   }
 

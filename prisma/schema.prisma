@@ -8,15 +8,18 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  firstName String   @map("first_name")
-  lastName  String   @map("last_name")
-  username  String   @unique
+  id        String    @id @default(uuid())
+  firstName String    @map("first_name")
+  lastName  String    @map("last_name")
+  username  String    @unique
   password  String
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  role      UserRoles @default(STUDENT)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
 
-  role UserRoles @default(STUDENT)
+  studentGroupMap   StudentGroupMap[]
+  grades            Grade[]
+  subjectTeacherMap SubjectTeacherMap[]
 
   @@map("users")
 }
@@ -25,4 +28,66 @@ enum UserRoles {
   DIRECTOR
   TEACHER
   STUDENT
+}
+
+model Group {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  studentGroupMap   StudentGroupMap[]
+  subjectTeacherMap SubjectTeacherMap[]
+
+  @@map("groups")
+}
+
+model StudentGroupMap {
+  student User   @relation(fields: [userId], references: [id])
+  userId  String @map("user_id")
+  group   Group  @relation(fields: [groupId], references: [id])
+  groupId String @map("group_id")
+
+  @@unique([userId, groupId])
+  @@map("student_group_map")
+}
+
+model Subject {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  subjectTeacherMap SubjectTeacherMap[]
+  grades            Grade[]
+
+  @@map("subjects")
+}
+
+model SubjectTeacherMap {
+  subject   Subject @relation(fields: [subjectId], references: [id])
+  subjectId String  @map("subject_id")
+
+  teacher   User   @relation(fields: [teacherId], references: [id])
+  teacherId String @map("teacher_id")
+
+  group   Group  @relation(fields: [groupId], references: [id])
+  groupId String @map("group_id")
+
+  @@unique([subjectId, teacherId, groupId])
+  @@map("subject_teacher_map")
+}
+
+model Grade {
+  grade     Float
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  student   User    @relation(fields: [studentId], references: [id])
+  studentId String  @map("student_id")
+  subject   Subject @relation(fields: [subjectId], references: [id])
+  subjectId String  @map("subject_id")
+
+  @@unique([studentId, subjectId])
+  @@map("grades")
 }

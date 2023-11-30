@@ -8,6 +8,7 @@ import { CreateUserDto } from '@/modules/users/dto/create-user.dto'
 import { HTTP_MESSAGES } from '@/consts/http-messages'
 import { UpdateUserDto } from '@/modules/users/dto/update-user.dto'
 import { UtilsService } from '@/core/utils/utils.service'
+import { UserRoles } from '@prisma/client'
 
 @Injectable()
 export class UsersService {
@@ -35,6 +36,14 @@ export class UsersService {
     }
 
     return user
+  }
+
+  async getTeachers() {
+    return this.repository.getUsersByRole(UserRoles.TEACHER)
+  }
+
+  async getStudents() {
+    return this.repository.getUsersByRole(UserRoles.STUDENT)
   }
 
   async updateUser(id: string, body: UpdateUserDto) {

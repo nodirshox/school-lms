@@ -27,12 +27,24 @@ export class UsersController {
     return this.service.createUser(body)
   }
 
-  @Get()
+  @Get('profile')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get user by token' })
   @UseGuards(JwtAuthGuard)
   getUserByToken(@User() user: IUser) {
     return this.service.getUser(user.id)
+  }
+
+  @Get('teachers')
+  @ApiOperation({ summary: 'Get teachers' })
+  getTeachers() {
+    return this.service.getTeachers()
+  }
+
+  @Get('students')
+  @ApiOperation({ summary: 'Get students' })
+  getStudents() {
+    return this.service.getStudents()
   }
 
   @Get(':id')
