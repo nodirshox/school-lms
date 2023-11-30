@@ -39,11 +39,14 @@ export class UsersService {
   }
 
   async getTeachers() {
-    return this.repository.getUsersByRole(UserRoles.TEACHER)
+    const teachers = await this.repository.getUsersByRole(UserRoles.TEACHER)
+
+    return { teachers }
   }
 
   async getStudents() {
-    return this.repository.getUsersByRole(UserRoles.STUDENT)
+    const students = await this.repository.getUsersByRole(UserRoles.STUDENT)
+    return students
   }
 
   async updateUser(id: string, body: UpdateUserDto) {
@@ -72,5 +75,13 @@ export class UsersService {
 
   async getUserByUsernameWithPassword(username: string) {
     return this.repository.getUserByUsernameWithPassword(username)
+  }
+
+  async checkStudentIds(studentIds: string[]): Promise<void> {
+    const existingStudents = await this.repository.countStudents(studentIds)
+
+    if (studentIds.length !== existingStudents) {
+      throw new BadRequestException(HTTP_MESSAGES.STUDENT_NOT_FOUND)
+    }
   }
 }

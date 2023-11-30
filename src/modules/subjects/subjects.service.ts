@@ -23,7 +23,8 @@ export class SubjectsService {
   }
 
   async getSubjects() {
-    return this.repository.getSubjects()
+    const subjects = await this.repository.getSubjects()
+    return subjects
   }
 
   async updateSubject(id: string, body: UpdateSubjectDto) {

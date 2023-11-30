@@ -4,7 +4,7 @@ import { CreateUserDto } from '@/modules/users/dto/create-user.dto'
 import { User, UserRoles } from '@prisma/client'
 import { UpdateUserDto } from '@/modules/users/dto/update-user.dto'
 import { GetUserDto } from '@/modules/users/dto/get-user.dto'
-import { selectUser } from '@/consts/select-user'
+import { selectUser } from '@/consts/prisma-selects'
 
 @Injectable()
 export class UsersRepository {
@@ -70,6 +70,17 @@ export class UsersRepository {
   async deleteUser(id: string) {
     return this.prisma.user.delete({
       where: { id },
+    })
+  }
+
+  async countStudents(studentIds: string[]) {
+    return this.prisma.user.count({
+      where: {
+        id: {
+          in: studentIds,
+        },
+        role: UserRoles.STUDENT,
+      },
     })
   }
 }
