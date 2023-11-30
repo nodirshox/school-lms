@@ -81,7 +81,18 @@ export class UsersService {
     const existingStudents = await this.repository.countStudents(studentIds)
 
     if (studentIds.length !== existingStudents) {
-      throw new BadRequestException(HTTP_MESSAGES.STUDENT_NOT_FOUND)
+      throw new NotFoundException(HTTP_MESSAGES.STUDENT_NOT_FOUND)
+    }
+  }
+
+  async checkTeacher(id: string): Promise<void> {
+    const existingTeacherCount = await this.repository.countUserByRole(
+      id,
+      UserRoles.TEACHER,
+    )
+
+    if (existingTeacherCount === 0) {
+      throw new NotFoundException(HTTP_MESSAGES.TEACHER_NOT_FOUND)
     }
   }
 }

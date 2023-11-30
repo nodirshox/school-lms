@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { CreateGroupDto } from '@/modules/groups/dto/create-group.dto'
 import { selectGroup } from '@/consts/prisma-selects'
 import { UpdateGroupDto } from '@/modules/groups/dto/update-group.dto'
+import { AddSubjectToGroup } from '@/modules/groups/dto/subject-to-group.dto'
 
 @Injectable()
 export class GroupsRepository {
@@ -96,5 +97,47 @@ export class GroupsRepository {
     )
 
     return this.prisma.$transaction(operations)
+  }
+
+  addSubjectToGroup(groupId: string, body: AddSubjectToGroup) {
+    return this.prisma.subjectTeacherMap.create({
+      data: {
+        group: {
+          connect: {
+            id: groupId,
+          },
+        },
+        teacher: {
+          connect: {
+            id: body.teacherId,
+          },
+        },
+        subject: {
+          connect: {
+            id: body.subjectId,
+          },
+        },
+      },
+    })
+  }
+
+  deletSubjectFromGroup(groupId: string, body: AddSubjectToGroup) {
+    return this.prisma.subjectTeacherMap.deleteMany({
+      where: {
+        groupId,
+        teacherId: body.teacherId,
+        subjectId: body.subjectId,
+      },
+    })
+  }
+
+  checkSubjectGroup(groupId: string, body: AddSubjectToGroup) {
+    return this.prisma.subjectTeacherMap.count({
+      where: {
+        groupId,
+        subjectId: body.subjectId,
+        teacherId: body.teacherId,
+      },
+    })
   }
 }

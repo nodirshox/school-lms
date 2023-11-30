@@ -8,5 +8,6 @@ import { CoreModule } from '@/core/core.module'
   imports: [CoreModule],
   providers: [SubjectsService, SubjectsRepository],
   controllers: [SubjectsController],
+  exports: [SubjectsService],
 })
 export class SubjectsModule {}

@@ -4,9 +4,10 @@ import { GroupsController } from '@/modules/groups/groups.controller'
 import { CoreModule } from '@/core/core.module'
 import { GroupsRepository } from '@/modules/groups/groups.repository'
 import { UsersModule } from '@/modules/users/users.module'
+import { SubjectsModule } from '@/modules/subjects/subjects.module'
 
 @Module({
-  imports: [CoreModule, UsersModule],
+  imports: [CoreModule, UsersModule, SubjectsModule],
   providers: [GroupsService, GroupsRepository],
   controllers: [GroupsController],
 })

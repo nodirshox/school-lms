@@ -3,6 +3,7 @@ import { GroupsService } from '@/modules/groups/groups.service'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { CreateGroupDto } from '@/modules/groups/dto/create-group.dto'
 import { UpdateGroupDto } from '@/modules/groups/dto/update-group.dto'
+import { AddSubjectToGroup } from '@/modules/groups/dto/subject-to-group.dto'
 
 @ApiTags('Group')
 @Controller({ path: 'groups', version: '1' })
@@ -37,5 +38,20 @@ export class GroupsController {
   @ApiOperation({ summary: 'Delete group' })
   deleteGroup(@Param('id') id: string) {
     return this.service.deleteGroup(id)
+  }
+
+  @Post(':id/subjects')
+  @ApiOperation({ summary: 'Add subject to group' })
+  addSubjectToGroup(@Param('id') id: string, @Body() body: AddSubjectToGroup) {
+    return this.service.addSubjectToGroup(id, body)
+  }
+
+  @Delete(':id/subjects')
+  @ApiOperation({ summary: 'Delete subject to group' })
+  deletSubjectFromGroup(
+    @Param('id') id: string,
+    @Body() body: AddSubjectToGroup,
+  ) {
+    return this.service.deletSubjectFromGroup(id, body)
   }
 }
