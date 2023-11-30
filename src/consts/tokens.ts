@@ -1,0 +1,1 @@
+export const ACCESS_TOKEN_EXPIRATION_TIME = '2h'

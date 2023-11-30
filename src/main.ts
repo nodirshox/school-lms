@@ -16,6 +16,7 @@ async function bootstrap() {
   )
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('School LMS')
     .setDescription('Rest API')
     .setVersion('1.0')

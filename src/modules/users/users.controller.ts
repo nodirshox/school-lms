@@ -1,8 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common'
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { UsersService } from '@/modules/users/users.service'
 import { CreateUserDto } from '@/modules/users/dto/create-user.dto'
 import { UpdateUserDto } from '@/modules/users/dto/update-user.dto'
+import { JwtAuthGuard } from '@/modules/auth/jwt-auth.guard'
+import { User } from '@/decorators/user.decorator'
+import { IUser } from '@/modules/users/dto/user.interface'
 
 @ApiTags('User')
 @Controller({ path: 'users', version: '1' })
@@ -13,6 +25,14 @@ export class UsersController {
   @ApiOperation({ summary: 'Create user' })
   createUser(@Body() body: CreateUserDto) {
     return this.service.createUser(body)
+  }
+
+  @Get()
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get user by token' })
+  @UseGuards(JwtAuthGuard)
+  getUserByToken(@User() user: IUser) {
+    return this.service.getUser(user.id)
   }
 
   @Get(':id')

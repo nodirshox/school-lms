@@ -7,19 +7,22 @@ import {
 import { CreateUserDto } from '@/modules/users/dto/create-user.dto'
 import { HTTP_MESSAGES } from '@/consts/http-messages'
 import { UpdateUserDto } from '@/modules/users/dto/update-user.dto'
+import { UtilsService } from '@/core/utils/utils.service'
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly repository: UsersRepository) {}
+  constructor(
+    private readonly repository: UsersRepository,
+    private readonly utils: UtilsService,
+  ) {}
 
   async createUser(body: CreateUserDto) {
-    const existingUser = await this.repository.getUserByUsername(body.username)
+    const existingUser = await this.getUserByUsername(body.username)
 
     if (existingUser) {
       throw new BadRequestException(HTTP_MESSAGES.USERNAME_EXISTS)
     }
-
-    // TODO: hash password
+    body.password = await this.utils.generateBcrypt(body.password)
 
     return this.repository.createUser(body)
   }
@@ -30,7 +33,6 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException(HTTP_MESSAGES.USER_NOT_FOUND)
     }
-    delete user.password
 
     return user
   }
@@ -38,15 +40,14 @@ export class UsersService {
   async updateUser(id: string, body: UpdateUserDto) {
     await this.getUser(id)
 
-    const existingUser = await this.repository.getUserByUsername(body.username)
+    const existingUser = await this.getUserByUsername(body.username)
 
     if (existingUser && existingUser.id !== id) {
       throw new BadRequestException(HTTP_MESSAGES.USERNAME_EXISTS)
     }
-    // TODO: hash password
-    const updatedUser = await this.repository.updateUser(id, body)
-    delete updatedUser.password
-    return updatedUser
+    body.password = await this.utils.generateBcrypt(body.password)
+
+    return this.repository.updateUser(id, body)
   }
 
   async deleteUser(id: string) {
@@ -54,5 +55,13 @@ export class UsersService {
     await this.repository.deleteUser(id)
 
     return { message: HTTP_MESSAGES.USER_DELETED }
+  }
+
+  private async getUserByUsername(username: string) {
+    return this.repository.getUserByUsername(username)
+  }
+
+  async getUserByUsernameWithPassword(username: string) {
+    return this.repository.getUserByUsernameWithPassword(username)
   }
 }
