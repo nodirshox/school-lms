@@ -17,22 +17,8 @@ export class GradesService {
     await this.userService.checkStudent(body.studentId)
     await this.subjectService.getSubject(body.subjectId)
     await this.subjectService.checkTeacherSubject(body.subjectId, teacherId)
-
-    const existingSubjectCount = await this.repository.checkStudentSubject(
-      body.studentId,
-      body.subjectId,
-    )
-    if (existingSubjectCount === 0) {
-      throw new BadRequestException(HTTP_MESSAGES.STUDENT_SUBJECT_NOT_EXISTS)
-    }
-
-    const existingGradeCount = await this.repository.checkGrade(
-      body.studentId,
-      body.subjectId,
-    )
-    if (existingGradeCount !== 0) {
-      throw new BadRequestException(HTTP_MESSAGES.GRADE_EXISTS)
-    }
+    await this.checkStudentSubject(body.studentId, body.subjectId)
+    await this.checkGrade(body.studentId, body.subjectId)
 
     return this.repository.createGrade(body)
   }
@@ -48,5 +34,31 @@ export class GradesService {
     })
 
     return { grades: convertedGrades }
+  }
+
+  private async checkStudentSubject(
+    studentId: string,
+    subjectId: string,
+  ): Promise<void> {
+    const existingSubjectCount = await this.repository.checkStudentSubject(
+      studentId,
+      subjectId,
+    )
+    if (existingSubjectCount === 0) {
+      throw new BadRequestException(HTTP_MESSAGES.STUDENT_SUBJECT_NOT_EXISTS)
+    }
+  }
+
+  private async checkGrade(
+    studentId: string,
+    subjectId: string,
+  ): Promise<void> {
+    const existingGradeCount = await this.repository.checkGrade(
+      studentId,
+      subjectId,
+    )
+    if (existingGradeCount !== 0) {
+      throw new BadRequestException(HTTP_MESSAGES.GRADE_EXISTS)
+    }
   }
 }
