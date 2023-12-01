@@ -7,7 +7,16 @@ export class TeachersService {
 
   async getGroupOfSubjects(teacherId: string) {
     const groups = await this.repository.getGroupOfSubjects(teacherId)
-
-    return { groups }
+    const convertedGroups = groups.map((gr) => {
+      return {
+        ...gr,
+        group: {
+          id: gr.group.id,
+          name: gr.group.name,
+          students: gr.group.students.map((st) => st.student),
+        },
+      }
+    })
+    return { groups: convertedGroups }
   }
 }

@@ -4,7 +4,7 @@ import { ArrayMinSize, IsArray, IsNotEmpty, IsString } from 'class-validator'
 export class CreateGroupDto {
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ description: 'Group name', example: 'CSE-17' })
+  @ApiProperty({ description: 'Group name', example: 'CSE-2' })
   name: string
 
   @IsArray()

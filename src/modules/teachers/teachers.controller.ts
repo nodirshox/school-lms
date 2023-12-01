@@ -26,6 +26,12 @@ export class TeachersController {
     return this.gradeService.createGrade(user.id, body)
   }
 
+  @Get('grades')
+  @ApiOperation({ summary: 'Get grades' })
+  getGrades(@User() user: IUser) {
+    return this.gradeService.getGradesByTeacher(user.id)
+  }
+
   @Delete('grades')
   @ApiOperation({ summary: 'Delete grade' })
   deleteGrade(@User() user: IUser, @Body() body: DeleteGradeDto) {

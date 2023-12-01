@@ -15,7 +15,7 @@ async function main() {
       role: UserRoles.DIRECTOR,
     },
   })
-  await prisma.user.create({
+  const teacher = await prisma.user.create({
     data: {
       firstName: 'Teacher',
       lastName: 'George',
@@ -24,13 +24,66 @@ async function main() {
       role: UserRoles.TEACHER,
     },
   })
-  await prisma.user.create({
+  const student = await prisma.user.create({
     data: {
       firstName: 'Student',
       lastName: 'John',
       username: 'student',
       password: await bcrypt.hash('password', PASSWORD_SALT),
       role: UserRoles.STUDENT,
+    },
+  })
+  const subject = await prisma.subject.create({
+    data: {
+      name: 'Math',
+    },
+  })
+  const group = await prisma.group.create({
+    data: {
+      name: 'CSE-1',
+      students: {
+        create: {
+          student: {
+            connect: {
+              id: student.id,
+            },
+          },
+        },
+      },
+    },
+  })
+  await prisma.subjectTeacherMap.create({
+    data: {
+      subject: {
+        connect: {
+          id: subject.id,
+        },
+      },
+      teacher: {
+        connect: {
+          id: teacher.id,
+        },
+      },
+      group: {
+        connect: {
+          id: group.id,
+        },
+      },
+    },
+  })
+  await prisma.grade.create({
+    data: {
+      grade: 90,
+      student: {
+        connect: {
+          id: student.id,
+        },
+      },
+      subject: {
+        connect: {
+          id: subject.id,
+        },
+      },
     },
   })
 }

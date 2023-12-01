@@ -42,6 +42,7 @@ export class GradesRepository {
         grade: true,
         subject: {
           select: {
+            id: true,
             name: true,
           },
         },
@@ -71,6 +72,36 @@ export class GradesRepository {
       where: {
         subjectId,
         studentId,
+      },
+    })
+  }
+
+  getGradesByTeacher(teacherId: string) {
+    return this.prisma.grade.findMany({
+      where: {
+        subject: {
+          subjectTeacherMap: {
+            some: {
+              teacherId,
+            },
+          },
+        },
+      },
+      select: {
+        grade: true,
+        subject: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        student: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
       },
     })
   }

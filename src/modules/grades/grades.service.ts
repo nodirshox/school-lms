@@ -53,7 +53,10 @@ export class GradesService {
     const convertedGrades = grades.map((grade) => {
       return {
         grade: grade.grade,
-        subjectName: grade.subject.name,
+        subject: {
+          id: grade.subject.id,
+          name: grade.subject.name,
+        },
       }
     })
 
@@ -71,5 +74,11 @@ export class GradesService {
     if (existingSubjectCount === 0) {
       throw new BadRequestException(HTTP_MESSAGES.STUDENT_SUBJECT_NOT_EXISTS)
     }
+  }
+
+  async getGradesByTeacher(teacherId: string) {
+    const grades = await this.repository.getGradesByTeacher(teacherId)
+
+    return { grades }
   }
 }
