@@ -68,9 +68,20 @@ export class UsersRepository {
   }
 
   async deleteUser(id: string) {
-    return this.prisma.user.delete({
-      where: { id },
-    })
+    return this.prisma.$transaction([
+      this.prisma.studentGroupMap.deleteMany({
+        where: { userId: id },
+      }),
+      this.prisma.grade.deleteMany({
+        where: { studentId: id },
+      }),
+      this.prisma.subjectTeacherMap.deleteMany({
+        where: { teacherId: id },
+      }),
+      this.prisma.user.delete({
+        where: { id },
+      }),
+    ])
   }
 
   async countStudents(studentIds: string[]) {

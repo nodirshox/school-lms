@@ -31,10 +31,18 @@ export class SubjectsRepository {
     })
   }
 
-  async deleteSubject(id: string): Promise<Subject> {
-    return this.prisma.subject.delete({
-      where: { id },
-    })
+  async deleteSubject(id: string) {
+    return this.prisma.$transaction([
+      this.prisma.grade.deleteMany({
+        where: { subjectId: id },
+      }),
+      this.prisma.subjectTeacherMap.deleteMany({
+        where: { subjectId: id },
+      }),
+      this.prisma.subject.delete({
+        where: { id },
+      }),
+    ])
   }
 
   async checkTeacherSubject(subjectId: string, teacherId: string) {
