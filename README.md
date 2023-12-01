@@ -10,9 +10,9 @@ Swagger URL:
 http://localhost:3000/api
 ```
 
-Sample users:
+## Sample users
 
-Director:
+Director
 
 Username
 
@@ -26,7 +26,9 @@ Password
 password
 ```
 
-Teacher:
+---
+
+Teacher
 
 Username
 
@@ -40,7 +42,9 @@ Password
 password
 ```
 
-Student:
+---
+
+Student
 
 Username
 
