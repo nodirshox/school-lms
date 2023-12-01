@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import { SubjectsRepository } from '@/modules/subjects/subjects.repository'
 import { CreateSubjectDto } from '@/modules/subjects/dto/create-subject.dto'
 import { HTTP_MESSAGES } from '@/consts/http-messages'
@@ -24,7 +28,7 @@ export class SubjectsService {
 
   async getSubjects() {
     const subjects = await this.repository.getSubjects()
-    return subjects
+    return { subjects }
   }
 
   async updateSubject(id: string, body: UpdateSubjectDto) {
@@ -37,5 +41,19 @@ export class SubjectsService {
     await this.getSubject(id)
 
     return this.repository.deleteSubject(id)
+  }
+
+  async checkTeacherSubject(
+    subjectId: string,
+    teacherId: string,
+  ): Promise<void> {
+    const existingTeacherCount = await this.repository.checkTeacherSubject(
+      subjectId,
+      teacherId,
+    )
+
+    if (existingTeacherCount === 0) {
+      throw new BadRequestException(HTTP_MESSAGES.TEACHER_IS_NOT_ATTACHED)
+    }
   }
 }

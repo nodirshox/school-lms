@@ -2,11 +2,11 @@ import { ExtractJwt, Strategy } from 'passport-jwt'
 import { PassportStrategy } from '@nestjs/passport'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtPayloadDto } from '@/modules/auth/dto/jwt-payload.dto'
-import { PrismaService } from '@/core/prisma/prisma.service'
+import { UsersService } from '@/modules/users/users.service'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly prisma: PrismaService) {
+  constructor(private readonly userService: UsersService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -15,13 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayloadDto) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: payload.id },
-      select: {
-        id: true,
-        role: true,
-      },
-    })
+    const user = await this.userService.getUserForAuth(payload.id)
 
     if (!user) throw new UnauthorizedException()
 

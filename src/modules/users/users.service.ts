@@ -46,7 +46,7 @@ export class UsersService {
 
   async getStudents() {
     const students = await this.repository.getUsersByRole(UserRoles.STUDENT)
-    return students
+    return { students }
   }
 
   async updateUser(id: string, body: UpdateUserDto) {
@@ -85,6 +85,17 @@ export class UsersService {
     }
   }
 
+  async checkStudent(id: string): Promise<void> {
+    const existingStudentCount = await this.repository.countUserByRole(
+      id,
+      UserRoles.STUDENT,
+    )
+
+    if (existingStudentCount === 0) {
+      throw new NotFoundException(HTTP_MESSAGES.STUDENT_NOT_FOUND)
+    }
+  }
+
   async checkTeacher(id: string): Promise<void> {
     const existingTeacherCount = await this.repository.countUserByRole(
       id,
@@ -94,5 +105,9 @@ export class UsersService {
     if (existingTeacherCount === 0) {
       throw new NotFoundException(HTTP_MESSAGES.TEACHER_NOT_FOUND)
     }
+  }
+
+  async getUserForAuth(id: string) {
+    return this.repository.getUserForAuth(id)
   }
 }

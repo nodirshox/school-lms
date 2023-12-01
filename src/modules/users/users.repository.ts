@@ -89,4 +89,14 @@ export class UsersRepository {
       where: { id, role },
     })
   }
+
+  async getUserForAuth(id: string) {
+    return this.prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        role: true,
+      },
+    })
+  }
 }

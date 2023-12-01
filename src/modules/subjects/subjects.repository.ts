@@ -36,4 +36,13 @@ export class SubjectsRepository {
       where: { id },
     })
   }
+
+  async checkTeacherSubject(subjectId: string, teacherId: string) {
+    return this.prisma.subjectTeacherMap.count({
+      where: {
+        teacherId,
+        subjectId,
+      },
+    })
+  }
 }
