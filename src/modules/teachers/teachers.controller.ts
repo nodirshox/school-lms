@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common'
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { CreateGradeDto } from '@/modules/grades/dto/create-grade.dto'
 import { GradesService } from '@/modules/grades/grades.service'
@@ -8,6 +8,7 @@ import { User } from '@/decorators/user.decorator'
 import { TeachersService } from '@/modules/teachers/teachers.service'
 import { RoleGuard } from '@/modules/auth/guards/role.guard'
 import { UserRoles } from '@prisma/client'
+import { DeleteGradeDto } from '@/modules/grades/dto/delete-grade.dto'
 
 @ApiTags('Teacher')
 @ApiBearerAuth()
@@ -23,6 +24,12 @@ export class TeachersController {
   @ApiOperation({ summary: 'Create grade' })
   createGrade(@User() user: IUser, @Body() body: CreateGradeDto) {
     return this.gradeService.createGrade(user.id, body)
+  }
+
+  @Delete('grades')
+  @ApiOperation({ summary: 'Delete grade' })
+  deleteGrade(@User() user: IUser, @Body() body: DeleteGradeDto) {
+    return this.gradeService.deleteGrade(user.id, body)
   }
 
   @Get('groups')

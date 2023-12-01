@@ -20,5 +20,7 @@ export const HTTP_MESSAGES = {
 
   // Grade
   GRADE_EXISTS: 'Grades is already exists',
+  GRADE_NOT_FOUND: 'Grade not found',
   STUDENT_SUBJECT_NOT_EXISTS: 'Student is not attached that defined subject',
+  GRADE_DELETED: 'Grade deleted',
 }

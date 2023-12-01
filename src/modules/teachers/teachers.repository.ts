@@ -15,6 +15,17 @@ export class TeachersRepository {
           select: {
             id: true,
             name: true,
+            students: {
+              select: {
+                student: {
+                  select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                  },
+                },
+              },
+            },
           },
         },
         subject: {

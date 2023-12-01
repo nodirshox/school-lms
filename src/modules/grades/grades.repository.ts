@@ -65,4 +65,13 @@ export class GradesRepository {
       },
     })
   }
+
+  deleteGrade(studentId: string, subjectId: string) {
+    return this.prisma.grade.deleteMany({
+      where: {
+        subjectId,
+        studentId,
+      },
+    })
+  }
 }
