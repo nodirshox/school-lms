@@ -1,11 +1,25 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common'
 import { GroupsService } from '@/modules/groups/groups.service'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger'
 import { CreateGroupDto } from '@/modules/groups/dto/create-group.dto'
 import { UpdateGroupDto } from '@/modules/groups/dto/update-group.dto'
 import { AddSubjectToGroup } from '@/modules/groups/dto/subject-to-group.dto'
+import { JwtAuthGuard } from '@/modules/auth/guards/jwt.guard'
+import { RoleGuard } from '@/modules/auth/guards/role.guard'
+import { UserRoles } from '@prisma/client'
 
 @ApiTags('Group')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard, RoleGuard([UserRoles.DIRECTOR]))
 @Controller({ path: 'groups', version: '1' })
 export class GroupsController {
   constructor(private readonly service: GroupsService) {}

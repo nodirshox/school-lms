@@ -6,10 +6,12 @@ import { JwtAuthGuard } from '@/modules/auth/guards/jwt.guard'
 import { IUser } from '@/modules/users/dto/user.interface'
 import { User } from '@/decorators/user.decorator'
 import { TeachersService } from '@/modules/teachers/teachers.service'
+import { RoleGuard } from '@/modules/auth/guards/role.guard'
+import { UserRoles } from '@prisma/client'
 
 @ApiTags('Teacher')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RoleGuard([UserRoles.TEACHER]))
 @Controller({ path: 'teachers', version: '1' })
 export class TeachersController {
   constructor(
