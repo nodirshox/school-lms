@@ -85,6 +85,8 @@ model SubjectTeacherMap {
 }
 
 model Grade {
+  id String @id @default(uuid())
+
   grade     Float
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -94,6 +96,5 @@ model Grade {
   subject   Subject @relation(fields: [subjectId], references: [id])
   subjectId String  @map("subject_id")
 
-  @@unique([studentId, subjectId])
   @@map("grades")
 }

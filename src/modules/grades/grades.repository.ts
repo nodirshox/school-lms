@@ -24,12 +24,9 @@ export class GradesRepository {
     })
   }
 
-  checkGrade(studentId: string, subjectId: string) {
-    return this.prisma.grade.count({
-      where: {
-        studentId,
-        subjectId,
-      },
+  getGrade(id: string) {
+    return this.prisma.grade.findUnique({
+      where: { id },
     })
   }
 
@@ -39,6 +36,7 @@ export class GradesRepository {
         studentId,
       },
       select: {
+        id: true,
         grade: true,
         subject: {
           select: {
@@ -67,12 +65,9 @@ export class GradesRepository {
     })
   }
 
-  deleteGrade(studentId: string, subjectId: string) {
-    return this.prisma.grade.deleteMany({
-      where: {
-        subjectId,
-        studentId,
-      },
+  deleteGrade(id: string) {
+    return this.prisma.grade.delete({
+      where: { id },
     })
   }
 
@@ -88,6 +83,7 @@ export class GradesRepository {
         },
       },
       select: {
+        id: true,
         grade: true,
         subject: {
           select: {
