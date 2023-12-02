@@ -12,7 +12,7 @@ http://164.90.238.173/api
 
 ## Sample users
 
-Director
+**Director**
 
 Username
 
@@ -28,7 +28,7 @@ password
 
 ---
 
-Teacher
+**Teacher**
 
 Username
 
@@ -44,7 +44,7 @@ password
 
 ---
 
-Student
+**Student**
 
 Username
 
