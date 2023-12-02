@@ -82,7 +82,11 @@ npx prisma db seed
 npm run start:dev
 ```
 
-4.
+4. Go to Swagger UI:
+
+```
+http://localhost:3000/api
+```
 
 ## Diagram
 
