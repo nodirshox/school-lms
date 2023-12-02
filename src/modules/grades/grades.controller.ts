@@ -13,13 +13,13 @@ export class GradesController {
   constructor(private readonly service: GradesService) {}
 
   @Get('students/:studentId')
-  @ApiOperation({ summary: 'Get student average students' })
+  @ApiOperation({ summary: 'Get student average grades' })
   getStudentAverageGrades(@Param('studentId') id: string) {
     return this.service.getStudentAverageGrades(id)
   }
 
   @Get('groups/:groupId')
-  @ApiOperation({ summary: 'Get student average students' })
+  @ApiOperation({ summary: 'Get average grades by group' })
   getAverageGradesByGroup(@Param('groupId') id: string) {
     return this.service.getAverageGradesByGroup(id)
   }
