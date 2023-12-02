@@ -4,6 +4,7 @@ import { CreateGradeDto } from '@/modules/grades/dto/create-grade.dto'
 import { UsersService } from '@/modules/users/users.service'
 import { SubjectsService } from '@/modules/subjects/subjects.service'
 import { HTTP_MESSAGES } from '@/consts/http-messages'
+import { GroupsService } from '@/modules/groups/groups.service'
 
 @Injectable()
 export class GradesService {
@@ -11,6 +12,7 @@ export class GradesService {
     private readonly repository: GradesRepository,
     private readonly userService: UsersService,
     private readonly subjectService: SubjectsService,
+    private readonly groupService: GroupsService,
   ) {}
 
   async createGrade(teacherId: string, body: CreateGradeDto) {
@@ -72,5 +74,19 @@ export class GradesService {
     const grades = await this.repository.getGradesByTeacher(teacherId)
 
     return { grades }
+  }
+
+  async getStudentAverageGrades(studentId: string) {
+    const student = await this.userService.getUser(studentId)
+    const grades = await this.repository.getStudentAverageGrades(studentId)
+
+    return { student, grades }
+  }
+
+  async getAverageGradesByGroup(groupId: string) {
+    const group = await this.groupService.getGroupById(groupId)
+    const grades = await this.repository.getAverageGradesByGroup(groupId)
+
+    return { group, grades }
   }
 }

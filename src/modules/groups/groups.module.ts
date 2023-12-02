@@ -10,5 +10,6 @@ import { SubjectsModule } from '@/modules/subjects/subjects.module'
   imports: [CoreModule, UsersModule, SubjectsModule],
   providers: [GroupsService, GroupsRepository],
   controllers: [GroupsController],
+  exports: [GroupsService],
 })
 export class GroupsModule {}

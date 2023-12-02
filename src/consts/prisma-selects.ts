@@ -9,6 +9,10 @@ export const selectUser = {
 }
 
 export const selectGroup = {
+  id: true,
+  name: true,
+  createdAt: true,
+  updatedAt: true,
   students: {
     include: {
       student: {
@@ -16,6 +20,16 @@ export const selectGroup = {
           id: true,
           firstName: true,
           lastName: true,
+        },
+      },
+    },
+  },
+  subjectTeacherMap: {
+    include: {
+      subject: {
+        select: {
+          id: true,
+          name: true,
         },
       },
     },

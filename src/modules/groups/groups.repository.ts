@@ -1,9 +1,9 @@
 import { PrismaService } from '@/core/prisma/prisma.service'
 import { Injectable } from '@nestjs/common'
 import { CreateGroupDto } from '@/modules/groups/dto/create-group.dto'
-import { selectGroup } from '@/consts/prisma-selects'
 import { UpdateGroupDto } from '@/modules/groups/dto/update-group.dto'
 import { AddSubjectToGroup } from '@/modules/groups/dto/subject-to-group.dto'
+import { selectGroup } from '@/consts/prisma-selects'
 
 @Injectable()
 export class GroupsRepository {
@@ -28,16 +28,22 @@ export class GroupsRepository {
     })
   }
 
+  async getGroupByIdWithStudents(id: string) {
+    return this.prisma.group.findUnique({
+      where: { id },
+      select: selectGroup,
+    })
+  }
+
   async getGroupById(id: string) {
     return this.prisma.group.findUnique({
       where: { id },
-      include: selectGroup,
     })
   }
 
   async getGroups() {
     return this.prisma.group.findMany({
-      include: selectGroup,
+      select: selectGroup,
     })
   }
 

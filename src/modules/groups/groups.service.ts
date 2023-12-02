@@ -24,13 +24,21 @@ export class GroupsService {
     return this.repository.createGroup(body)
   }
 
-  async getGroup(id: string) {
+  async getGroupByIdWithStudents(id: string) {
     await this.checkGroup(id)
-    const group = await this.repository.getGroupById(id)
+    const group = await this.repository.getGroupByIdWithStudents(id)
 
     const students = group.students.map((gt) => gt.student)
+    const subjects = group.subjectTeacherMap.map((st) => st.subject)
 
-    return { ...group, students }
+    delete group.subjectTeacherMap
+
+    return { ...group, students, subjects }
+  }
+
+  async getGroupById(id: string) {
+    await this.checkGroup(id)
+    return this.repository.getGroupById(id)
   }
 
   async getGroups() {
@@ -38,8 +46,12 @@ export class GroupsService {
 
     const convertedGroups = groups.map((group) => {
       return {
-        ...group,
+        id: group.id,
+        name: group.name,
+        createdAt: group.createdAt,
+        updatedAt: group.updatedAt,
         students: group.students.map((gt) => gt.student),
+        subjects: group.subjectTeacherMap.map((st) => st.subject),
       }
     })
 

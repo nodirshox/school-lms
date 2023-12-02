@@ -101,4 +101,54 @@ export class GradesRepository {
       },
     })
   }
+
+  getStudentAverageGrades(studentId: string) {
+    const sql = `
+    SELECT 
+        g.name AS "groupName", 
+        s.name AS "subjectName", 
+        AVG(gr.grade) AS "averageGrade"
+    FROM 
+        users u
+    INNER JOIN 
+        student_group_map sgm ON u.id = sgm.user_id
+    INNER JOIN 
+        groups g ON sgm.group_id = g.id
+    INNER JOIN 
+        grades gr ON u.id = gr.student_id
+    INNER JOIN 
+        subject_teacher_map stm ON stm.group_id = g.id
+    INNER JOIN 
+        subjects s ON stm.subject_id = s.id AND gr.subject_id = s.id
+    WHERE 
+        u.id = '${studentId}'
+    GROUP BY 
+        "groupName", "subjectName"
+    ORDER BY 
+        "groupName" DESC;
+    `
+    return this.prisma.$queryRawUnsafe(sql)
+  }
+
+  getAverageGradesByGroup(groupId: string) {
+    const sql = `
+    SELECT 
+      g.name AS group_name, 
+      s.name AS subject_name, 
+      AVG(gr.grade) AS average_grade
+    FROM 
+        grades gr
+    INNER JOIN 
+        subjects s ON gr.subject_id = s.id
+    INNER JOIN 
+        student_group_map sgm ON gr.student_id = sgm.user_id
+    INNER JOIN 
+        groups g ON sgm.group_id = g.id
+    WHERE 
+        g.id = '${groupId}'
+    GROUP BY 
+        g.name, s.name;
+    `
+    return this.prisma.$queryRawUnsafe(sql)
+  }
 }

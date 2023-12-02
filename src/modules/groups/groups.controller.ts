@@ -33,7 +33,7 @@ export class GroupsController {
   @Get(':id')
   @ApiOperation({ summary: 'Get group' })
   getGroup(@Param('id') id: string) {
-    return this.service.getGroup(id)
+    return this.service.getGroupByIdWithStudents(id)
   }
 
   @Get()
