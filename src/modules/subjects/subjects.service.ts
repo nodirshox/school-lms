@@ -39,8 +39,9 @@ export class SubjectsService {
 
   async deleteSubject(id: string) {
     await this.getSubject(id)
+    await this.repository.deleteSubject(id)
 
-    return this.repository.deleteSubject(id)
+    return { message: HTTP_MESSAGES.SUBJECT_DELETED }
   }
 
   async checkTeacherSubject(

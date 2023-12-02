@@ -10,6 +10,7 @@ export const HTTP_MESSAGES = {
   // Subject
   SUBJECT_NOT_FOUND: 'Subject not found',
   TEACHER_IS_NOT_ATTACHED: 'Teacher is not attached to subject',
+  SUBJECT_DELETED: 'Subject deleted',
 
   // Group
   GROUP_NOT_FOUND: 'Group not found',
