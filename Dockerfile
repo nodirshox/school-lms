@@ -16,5 +16,5 @@ RUN npm install --omit=dev
 COPY --chown=node:node --from=build /usr/src/app/node_modules/.prisma/client  ./node_modules/.prisma/client
 
 ENV NODE_ENV production
-EXPOSE 3000
+EXPOSE 4000
 CMD ["dumb-init", "node", "dist/src/main"]
