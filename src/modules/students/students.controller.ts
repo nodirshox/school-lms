@@ -25,7 +25,7 @@ export class StudentsController {
   }
 
   @Get('schedule')
-  @ApiOperation({ summary: 'Get grades by student' })
+  @ApiOperation({ summary: 'Get groups by student' })
   getScheduleByStudent(@User() user: IUser) {
     return this.service.getScheduleByStudent(user.id)
   }
