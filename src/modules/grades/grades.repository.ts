@@ -133,9 +133,8 @@ export class GradesRepository {
   getAverageGradesByGroup(groupId: string) {
     const sql = `
     SELECT 
-      g.name AS group_name, 
-      s.name AS subject_name, 
-      AVG(gr.grade) AS average_grade
+        s.name AS "subjectName", 
+        AVG(gr.grade) AS "averageGrade"
     FROM 
         grades gr
     INNER JOIN 
@@ -147,7 +146,7 @@ export class GradesRepository {
     WHERE 
         g.id = '${groupId}'
     GROUP BY 
-        g.name, s.name;
+        s.name;
     `
     return this.prisma.$queryRawUnsafe(sql)
   }
