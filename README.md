@@ -7,7 +7,7 @@ ORM: Prisma (PostgreSQL)
 Swagger URL:
 
 ```
-http://164.90.238.173/api
+http://localhost:3000/api
 ```
 
 ## Sample users
